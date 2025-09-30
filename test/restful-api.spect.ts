@@ -149,6 +149,35 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       });
   });
 
+  it('DELETE /objects/:id — deve deletar objeto existente com sucesso', async () => {
+    const fakeObj = {
+      name: faker.commerce.productName(),
+      data: {
+        color: faker.color.human(),
+        price: faker.number.float({ min: 10, max: 500, fractionDigits: 2 }),
+      },
+    };
+
+    const created = await pactum
+      .spec()
+      .post(`${baseUrl}${endpoint}`)
+      .withJson(fakeObj)
+      .expectStatus(StatusCodes.OK)
+      .toss();
+
+    const objectId = created.body.id;
+
+    await pactum
+      .spec()
+      .delete(`${baseUrl}${endpoint}/${objectId}`)
+      .expectStatus(StatusCodes.OK);
+
+    await pactum
+      .spec()
+      .get(`${baseUrl}${endpoint}/${objectId}`)
+      .expectStatus(StatusCodes.NOT_FOUND);
+  });
+
   it('POST /objects — deve permitir cadastrar sem o campo "name"', async () => {
     const invalidObj = {
       data: {
