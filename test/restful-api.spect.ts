@@ -103,14 +103,12 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       },
     };
 
-    const res = await pactum
+    await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
       .expectStatus(StatusCodes.OK)
       .toss();
-
-    console.log('Resposta price negativo:', res.body);
   });
 
   it('PATCH /objects/:id — deve atualizar parcialmente o campo "name"', async () => {
@@ -186,14 +184,12 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       },
     };
 
-    const res = await pactum
+    await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
       .expectStatus(StatusCodes.OK)
       .toss();
-
-    console.log('Resposta falta name:', res.body);
   });
 
   it('POST /objects — deve ignorar o campo "price" como string inválida', async () => {
@@ -205,13 +201,11 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       },
     };
 
-    const res = await pactum
+    await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
       .expectStatus(StatusCodes.OK)
       .toss();
-
-    console.log('Resposta price inválida:', res.body);
   });
 });
