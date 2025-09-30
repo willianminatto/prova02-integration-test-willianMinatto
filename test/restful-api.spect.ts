@@ -103,11 +103,14 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       },
     };
 
-    await pactum
+    const res = await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
-      .expectStatus(StatusCodes.BAD_REQUEST);
+      .expectStatus(StatusCodes.BAD_REQUEST)
+      .toss();
+
+    console.log('Resposta price negativo:', res.body);
   });
 
   it('PATCH /objects/:id — deve atualizar parcialmente o campo "name"', async () => {
@@ -166,7 +169,7 @@ describe('Basic integration tests restful-api.dev /objects', () => {
     await pactum
       .spec()
       .get(`${baseUrl}${endpoint}`)
-      .withQueryParams('name', filterName)
+      .withQueryParams({ name: filterName })
       .expectStatus(StatusCodes.OK)
       .expectJsonLike([
         {
@@ -183,11 +186,14 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       },
     };
 
-    await pactum
+    const res = await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
-      .expectStatus(StatusCodes.BAD_REQUEST);
+      .expectStatus(StatusCodes.BAD_REQUEST)
+      .toss();
+
+    console.log('Resposta falta name:', res.body);
   });
 
   it('POST /objects — deve falhar ao enviar "price" como string inválida', async () => {
@@ -195,14 +201,17 @@ describe('Basic integration tests restful-api.dev /objects', () => {
       name: faker.commerce.productName(),
       data: {
         color: faker.color.human(),
-        price: "invalid-price-string", // tipo errado
+        price: "invalid-price-string",
       },
     };
-  
-    await pactum
+
+    const res = await pactum
       .spec()
       .post(`${baseUrl}${endpoint}`)
       .withJson(invalidObj)
-      .expectStatus(StatusCodes.BAD_REQUEST);
-  });  
+      .expectStatus(StatusCodes.BAD_REQUEST)
+      .toss();
+
+    console.log('Resposta price inválida:', res.body);
+  });
 });
